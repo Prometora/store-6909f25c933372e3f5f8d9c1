@@ -5,12 +5,11 @@ import SellerNavigationList from './SellerNavigationList';
 
 interface SellerBuyerSidebarProps {
   storeId: string;
-  storeName: string;
   marketplaceTemplate?: 'general' | 'product' | 'rental' | 'service';
   onNavigate?: () => void;
 }
 
-export default function SellerBuyerSidebar({ storeId, storeName, marketplaceTemplate, onNavigate }: SellerBuyerSidebarProps) {
+export default function SellerBuyerSidebar({ storeId, marketplaceTemplate, onNavigate }: SellerBuyerSidebarProps) {
   const [userRoles, setUserRoles] = useState<('buyer' | 'seller')[]>([]);
   const [userName, setUserName] = useState<string | undefined>();
   const [userEmail, setUserEmail] = useState<string | undefined>();
@@ -55,7 +54,6 @@ export default function SellerBuyerSidebar({ storeId, storeName, marketplaceTemp
   return (
     <SellerNavigationList
       storeId={storeId}
-      storeName={storeName}
       userRoles={userRoles}
       marketplaceTemplate={marketplaceTemplate}
       onNavigate={onNavigate}
