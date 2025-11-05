@@ -1,18 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Check if user is logged in
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/user/me', {
+          credentials: 'include',
+        });
+        setIsLoggedIn(response.ok);
+      } catch (error) {
+        setIsLoggedIn(false);
+      } finally {
+        setLoading(false);
+      }
+    }
+    checkAuth();
+  }, []);
 
   // Get store slug from environment (set during build)
-  const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || 'dogs-58';
+  const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || '{{STORE_SLUG}}';
 
-  // Check if we're on a custom domain (not prometora.com)
-  const isCustomDomain = typeof window !== 'undefined' &&
-    !window.location.hostname.includes('prometora.com');
+  // Check if we're on a custom domain or prometora.com subdomain (not www.prometora.com)
+  // Both custom domains and *.prometora.com subdomains should use local paths
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+  const isMainPrometoraApp = hostname === 'www.prometora.com' || hostname === 'prometora.com' || hostname === 'localhost';
+  const isCustomDomain = !isMainPrometoraApp;
 
   // Build navigation links based on domain
   const navigation = [
@@ -29,7 +50,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-gray-900">
-              DOGS 58
+              {{STORE_NAME}}
             </Link>
           </div>
 
@@ -46,13 +67,24 @@ export default function Header() {
                 </Link>
               ))}
             </div>
-            {/* Sign In Button */}
-            <Link
-              href={isCustomDomain ? "/signin" : `/s/${storeSlug}/signin`}
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 px-4 py-2 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
-            >
-              Sign In
-            </Link>
+            {/* Auth Button */}
+            {!loading && (
+              isLoggedIn ? (
+                <Link
+                  href={isCustomDomain ? "/dashboard" : `/s/${storeSlug}/dashboard`}
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 px-4 py-2 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href={isCustomDomain ? "/signin" : `/s/${storeSlug}/signin`}
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 px-4 py-2 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
+                >
+                  Sign In
+                </Link>
+              )
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -86,14 +118,26 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
-              {/* Sign In Button - Mobile */}
-              <Link
-                href={isCustomDomain ? "/signin" : `/s/${storeSlug}/signin`}
-                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium border-t border-gray-200 mt-2 pt-4"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Sign In
-              </Link>
+              {/* Auth Button - Mobile */}
+              {!loading && (
+                isLoggedIn ? (
+                  <Link
+                    href={isCustomDomain ? "/dashboard" : `/s/${storeSlug}/dashboard`}
+                    className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium border-t border-gray-200 mt-2 pt-4"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    href={isCustomDomain ? "/signin" : `/s/${storeSlug}/signin`}
+                    className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium border-t border-gray-200 mt-2 pt-4"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                )
+              )}
             </div>
           </div>
         )}
