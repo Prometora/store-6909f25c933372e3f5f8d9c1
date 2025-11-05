@@ -6,7 +6,7 @@ import { CheckoutPage } from '@prometora/marketplace-ui';
  */
 export default function Checkout() {
   const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || process.env.STORE_SLUG || '';
-  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || process.env.PROMETORA_API_URL || 'https://www.prometora.com';
+  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || ''; // Use empty string for relative URLs
 
   if (!storeSlug) {
     return (
