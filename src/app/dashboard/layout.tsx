@@ -24,7 +24,6 @@ export default async function DashboardLayout({
         <div className="flex flex-col flex-grow pt-5 overflow-y-auto bg-white border-r">
           <SellerBuyerSidebar
             storeId={storeSlug}
-            storeName=""
             marketplaceTemplate="general"
           />
         </div>
