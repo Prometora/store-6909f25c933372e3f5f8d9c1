@@ -6,7 +6,7 @@ import { BookingsPage } from '@prometora/marketplace-ui';
  */
 export default function Bookings() {
   const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || process.env.STORE_SLUG || '';
-  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || ''; // Use empty string for relative URLs
+  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || 'https://www.prometora.com'; // Use empty string for relative URLs
 
   if (!storeSlug) {
     return (

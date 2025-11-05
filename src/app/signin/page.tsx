@@ -1,12 +1,12 @@
-import { SignInPage } from '@prometora/marketplace-ui';
+import { SignInPageClient } from './SignInPageClient';
 
 /**
- * Sign In Page
- * Wrapper page that uses the SignInPage component from @prometora/marketplace-ui
+ * Sign In Page (Server Component)
+ * Fetches store info server-side to avoid loading spinner
  */
-export default function SignIn() {
+export default async function SignIn() {
   const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || process.env.STORE_SLUG || '';
-  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || ''; // Use empty string for relative URLs
+  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || 'https://www.prometora.com';
 
   if (!storeSlug) {
     return (
@@ -16,5 +16,25 @@ export default function SignIn() {
     );
   }
 
-  return <SignInPage storeSlug={storeSlug} apiUrl={apiUrl} />;
+  // Fetch store info server-side
+  let storeInfo = null;
+  try {
+    const response = await fetch(`${apiUrl}/api/stores/${storeSlug}/info`, {
+      cache: 'no-store', // Always get fresh data
+    });
+
+    if (response.ok) {
+      storeInfo = await response.json();
+    }
+  } catch (error) {
+    console.error('Failed to fetch store info:', error);
+  }
+
+  return (
+    <SignInPageClient
+      storeSlug={storeSlug}
+      apiUrl={apiUrl}
+      initialStoreInfo={storeInfo}
+    />
+  );
 }
