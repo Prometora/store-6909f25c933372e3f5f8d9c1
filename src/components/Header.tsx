@@ -27,7 +27,8 @@ export default function Header() {
   }, []);
 
   // Get store slug from environment (set during build)
-  const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || '{{STORE_SLUG}}';
+  const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || process.env.STORE_SLUG || '';
+  const storeName = process.env.NEXT_PUBLIC_STORE_NAME || 'Store';
 
   // Check if we're on a custom domain or prometora.com subdomain (not www.prometora.com)
   // Both custom domains and *.prometora.com subdomains should use local paths
@@ -50,7 +51,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-gray-900">
-              {{STORE_NAME}}
+              {storeName}
             </Link>
           </div>
 
