@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const authToken = cookieStore.get('auth_token');
 
     // Proxy the request to the main Prometora API
-    const prometoraApiUrl = process.env.PROMETORA_API_URL || 'https://www.prometora.com';
+    const prometoraApiUrl = process.env.PROMETORA_API_URL || ''; // Use empty string for relative URLs
     const proxyUrl = `${prometoraApiUrl}/api/proxy-upload/video`;
 
     console.log(`📤 Proxying video upload to: ${proxyUrl}`);
