@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
+import ConditionalHeader from "@/components/ConditionalHeader";
 
 export const metadata: Metadata = {
-  title: "DOGS 58",
-  description: "marketplace for dog owners.",
+  title: "{{STORE_NAME}}",
+  description: "{{STORE_DESCRIPTION}}",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
         <script src="/visual-edit-client.js" defer></script>
       </head>
       <body>
-        <Header />
+        <ConditionalHeader />
         {children}
       </body>
     </html>
