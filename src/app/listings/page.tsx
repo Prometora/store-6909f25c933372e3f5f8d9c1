@@ -6,7 +6,9 @@ import { ListingsPage } from '@prometora/marketplace-ui';
  */
 export default function Listings() {
   const storeSlug = process.env.NEXT_PUBLIC_STORE_SLUG || process.env.STORE_SLUG || '';
-  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || process.env.PROMETORA_API_URL || 'https://www.prometora.com';
+  // Use empty string for relative URLs - deployed stores will use their own domain
+  // Set NEXT_PUBLIC_PROMETORA_URL in .env.local for local development pointing to main app
+  const apiUrl = process.env.NEXT_PUBLIC_PROMETORA_URL || '';
 
   if (!storeSlug) {
     return (
